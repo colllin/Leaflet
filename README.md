@@ -1,6 +1,6 @@
 Work in progress.
 
-## Goals
+# Goals
 
 - Declarative Map contents
   - Render react components within the Map component to control what appears on the map (or doesn't).
