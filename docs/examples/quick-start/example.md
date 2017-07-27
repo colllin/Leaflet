@@ -3,6 +3,7 @@ layout: tutorial_frame
 title: Quick Start
 customMapContainer: "true"
 ---
+```
 componentWillMount() {
 	this.setState({
 		popup: 'marker',
@@ -79,3 +80,4 @@ render() {
 		</Map>
 	);
 }
+```
