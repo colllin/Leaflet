@@ -3,44 +3,79 @@ layout: tutorial_frame
 title: Quick Start
 customMapContainer: "true"
 ---
-<div id='mapid' style='width: 600px; height: 400px;'></div>
-<script>
+componentWillMount() {
+	this.setState({
+		popup: 'marker',
+		popupCoords: null,
+	});
+}
 
-	var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+closePopup = () => this.setState({
+	popup: null,
+	popupCoords: null,
+})
 
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		id: 'mapbox.streets'
-	}).addTo(mymap);
+onMapClick = (event) => {
+	this.setState({
+		popup: 'click',
+		popupCoords: event.latlng,
+	});
+}
 
-	L.marker([51.5, -0.09]).addTo(mymap)
-		.bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+render() {
+	const mapboxLayerId = 'mapbox.streets';
+	const mapboxUrlTemplate = `https://api.tiles.mapbox.com/v4/${mapboxLayerId}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw`;
 
-	L.circle([51.508, -0.11], 500, {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5
-	}).addTo(mymap).bindPopup("I am a circle.");
-
-	L.polygon([
-		[51.509, -0.08],
-		[51.503, -0.06],
-		[51.51, -0.047]
-	]).addTo(mymap).bindPopup("I am a polygon.");
-
-
-	var popup = L.popup();
-
-	function onMapClick(e) {
-		popup
-			.setLatLng(e.latlng)
-			.setContent("You clicked the map at " + e.latlng.toString())
-			.openOn(mymap);
-	}
-
-	mymap.on('click', onMapClick);
-
-</script>
+	return (
+		<Map view={[51.505, -0.09, 13]} onClick={this.onMapClick}>
+			<TileLayer urlTemplate={mapboxUrlTemplate} maxZoom={18} />
+			<Marker refs={(ref) => this.marker = ref} coords={[51.5, -0.09]} />
+			<Circle
+				refs={(ref) => this.circle = ref}
+				coords={[51.508, -0.11]}
+				onClick={() => this.setState({popup: 'circle'})}
+				svgStyle={{
+					radius: 500,
+					color: 'red',
+					fillColor: '#f03',
+					fillOpacity: 0.5,
+				}}
+			/>
+			<Polygon
+				refs={(ref) => this.polygon = ref}
+				coords={[
+					[51.509, -0.08],
+					[51.503, -0.06],
+					[51.51, -0.047]
+				]}
+				onClick={() => this.setState({popup: 'polygon'})}
+			/>
+			{this.state.popup == 'marker' && (
+				<Popup target={this.marker} onClose={this.closePopup}>
+					<b>Hello world!</b><br />I am a popup.
+				</Popup>
+			)}
+			{this.state.popup == 'circle' && (
+				<Popup target={this.circle} onClose={this.closePopup}>
+					I am a circle.
+				</Popup>
+			)}
+			{this.state.popup == 'polygon' && (
+				<Popup target={this.polygon} onClose={this.closePopup}>
+					I am a polygon.
+				</Popup>
+			)}
+			{this.state.popup == 'click' && (
+				<Popup coords={this.state.popupCoords} onClose={this.closePopup}>
+					You clicked the map at {this.state.popupCoords.toString()}.
+				</Popup>
+			)}
+			<Attribution>
+				Map data &copy;
+				<a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
+				<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
+				Imagery &copy; <a href="http://mapbox.com">Mapbox</a>
+			</Attribution>
+		</Map>
+	);
+}
