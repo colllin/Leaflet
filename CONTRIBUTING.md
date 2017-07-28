@@ -66,7 +66,7 @@ and ask yourself two questions:
 If your feature or API improvement did get merged into master,
 please consider submitting another pull request with the corresponding [documentation update](#improving-documentation).
 
-### Setting up the Build System
+### Setting up the Build System & Development Environment
 
 The Leaflet build system uses [Node](http://nodejs.org/), and the [Jake](http://jakejs.com/) Javascript build tool.
 To set up the Leaflet build system, install Node then run the following commands in the project root to install Jake:
@@ -79,6 +79,16 @@ or, if you prefer [`yarn`](https://yarnpkg.com/) over `npm`:
 ```
 yarn global add jake
 yarn install
+```
+
+### Running the Development Server
+
+The next.js dev server allows you to easily create & run demos/examples from the `/pages` directory. You can use existing examples or create your own. Please don't modify the intended behavior of committed examples, even if you created them, because other people may be using them for development.  A good rule of thumb is to create a separate, minimal demo file for every feature we support, along with additional demos for interesting combinations of features.  Please also add any new demo files to `/pages/index.js`.  To visit a particular demo, e.g. `/pages/example.js`, simply visit `http://localhost:3000/example`.
+
+This command will run the dev server on `http://localhost:3000/`:
+
+```
+npm run dev -- -p 3000
 ```
 
 ### Making Changes to Leaflet Source
