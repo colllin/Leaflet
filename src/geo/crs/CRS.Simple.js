@@ -1,7 +1,7 @@
 import {CRS} from './CRS';
 import {LonLat} from '../projection/Projection.LonLat';
 import {toTransformation} from '../../geometry/Transformation';
-import * as Util from '../../core/Util';
+import _ from 'lodash';
 
 /*
  * @namespace CRS
@@ -13,7 +13,7 @@ import * as Util from '../../core/Util';
  * simple euclidean distance.
  */
 
-export var Simple = Util.extend({}, CRS, {
+export var Simple = _.merge({}, CRS, {
 	projection: LonLat,
 	transformation: toTransformation(1, 0, -1, 0),
 

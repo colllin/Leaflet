@@ -1,7 +1,7 @@
 import {Earth} from './CRS.Earth';
 import {LonLat} from '../projection/Projection.LonLat';
 import {toTransformation} from '../../geometry/Transformation';
-import * as Util from '../../core/Util';
+import _ from 'lodash';
 
 /*
  * @namespace CRS
@@ -16,7 +16,7 @@ import * as Util from '../../core/Util';
  * or (-180,-90) for `TileLayer`s with [the `tms` option](#tilelayer-tms) set.
  */
 
-export var EPSG4326 = Util.extend({}, Earth, {
+export var EPSG4326 = _.merge({}, Earth, {
 	code: 'EPSG:4326',
 	projection: LonLat,
 	transformation: toTransformation(1 / 180, 1, -1 / 180, 0.5)

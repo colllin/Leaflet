@@ -200,7 +200,8 @@ export var emptyImageUrl = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAA
 // inspired by http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 
 function getPrefixed(name) {
-	return window['webkit' + name] || window['moz' + name] || window['ms' + name];
+	if (process.browser)
+		return window['webkit' + name] || window['moz' + name] || window['ms' + name];
 }
 
 var lastTime = 0;
@@ -211,11 +212,11 @@ function timeoutDefer(fn) {
 	    timeToCall = Math.max(0, 16 - (time - lastTime));
 
 	lastTime = time + timeToCall;
-	return window.setTimeout(fn, timeToCall);
+	return setTimeout(fn, timeToCall);
 }
 
-export var requestFn = window.requestAnimationFrame || getPrefixed('RequestAnimationFrame') || timeoutDefer;
-export var cancelFn = window.cancelAnimationFrame || getPrefixed('CancelAnimationFrame') ||
+export var requestFn = (process.browser && window.requestAnimationFrame) || getPrefixed('RequestAnimationFrame') || timeoutDefer;
+export var cancelFn = (process.browser && window.cancelAnimationFrame) || getPrefixed('CancelAnimationFrame') ||
 		getPrefixed('CancelRequestAnimationFrame') || function (id) { window.clearTimeout(id); };
 
 // @function requestAnimFrame(fn: Function, context?: Object, immediate?: Boolean): Number

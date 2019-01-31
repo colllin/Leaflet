@@ -1,5 +1,5 @@
 import React from 'react';
-import Map from '../src/components/Map';
+import Map from '../../src/components/Map';
 
 class Page extends React.Component {
   // static async getInitialProps ({query}) {

@@ -1,7 +1,7 @@
 import {Earth} from './CRS.Earth';
 import {Mercator} from '../projection/Projection.Mercator';
 import {toTransformation} from '../../geometry/Transformation';
-import * as Util from '../../core/Util';
+import _ from 'lodash';
 
 /*
  * @namespace CRS
@@ -9,7 +9,7 @@ import * as Util from '../../core/Util';
  *
  * Rarely used by some commercial tile providers. Uses Elliptical Mercator projection.
  */
-export var EPSG3395 = Util.extend({}, Earth, {
+export var EPSG3395 = _.merge({}, Earth, {
 	code: 'EPSG:3395',
 	projection: Mercator,
 

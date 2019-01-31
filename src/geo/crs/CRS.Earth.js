@@ -1,5 +1,5 @@
 import {CRS} from './CRS';
-import * as Util from '../../core/Util';
+import _ from 'lodash';
 
 /*
  * @namespace CRS
@@ -11,7 +11,7 @@ import * as Util from '../../core/Util';
  * meters.
  */
 
-export var Earth = Util.extend({}, CRS, {
+export var Earth = _.merge({}, CRS, {
 	wrapLng: [-180, 180],
 
 	// Mean Earth Radius, as recommended for use by

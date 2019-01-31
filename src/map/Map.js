@@ -126,8 +126,8 @@ export var Map = Evented.extend({
 	initialize: function (id, options) { // (HTMLElement or String, Object)
 		options = Util.setOptions(this, options);
 
-		this._initContainer(id);
-		this._initLayout();
+		// this._initContainer(id);
+		// this._initLayout();
 
 		// hack for https://github.com/Leaflet/Leaflet/issues/1980
 		this._onResize = Util.bind(this._onResize, this);
@@ -1030,86 +1030,66 @@ export var Map = Evented.extend({
 	// map initialization methods
 
 	_initContainer: function (id) {
-		var container = this._container = DomUtil.get(id);
-
-		if (!container) {
-			throw new Error('Map container not found.');
-		} else if (container._leaflet_id) {
-			throw new Error('Map container is already initialized.');
-		}
-
-		DomEvent.on(container, 'scroll', this._onScroll, this);
 		this._containerId = Util.stamp(container);
 	},
 
 	_initLayout: function () {
-		var container = this._container;
+		// var position = DomUtil.getStyle(container, 'position');
+		//
+		// if (position !== 'absolute' && position !== 'relative' && position !== 'fixed') {
+		// 	container.style.position = 'relative';
+		// }
+		//
+		// this._initPanes();
 
-		this._fadeAnimated = this.options.fadeAnimation && Browser.any3d;
-
-		DomUtil.addClass(container, 'leaflet-container' +
-			(Browser.touch ? ' leaflet-touch' : '') +
-			(Browser.retina ? ' leaflet-retina' : '') +
-			(Browser.ielt9 ? ' leaflet-oldie' : '') +
-			(Browser.safari ? ' leaflet-safari' : '') +
-			(this._fadeAnimated ? ' leaflet-fade-anim' : ''));
-
-		var position = DomUtil.getStyle(container, 'position');
-
-		if (position !== 'absolute' && position !== 'relative' && position !== 'fixed') {
-			container.style.position = 'relative';
-		}
-
-		this._initPanes();
-
-		if (this._initControlPos) {
-			this._initControlPos();
-		}
+		// if (this._initControlPos) {
+		// 	this._initControlPos();
+		// }
 	},
 
-	_initPanes: function () {
-		var panes = this._panes = {};
-		this._paneRenderers = {};
-
-		// @section
-		//
-		// Panes are DOM elements used to control the ordering of layers on the map. You
-		// can access panes with [`map.getPane`](#map-getpane) or
-		// [`map.getPanes`](#map-getpanes) methods. New panes can be created with the
-		// [`map.createPane`](#map-createpane) method.
-		//
-		// Every map has the following default panes that differ only in zIndex.
-		//
-		// @pane mapPane: HTMLElement = 'auto'
-		// Pane that contains all other map panes
-
-		this._mapPane = this.createPane('mapPane', this._container);
-		DomUtil.setPosition(this._mapPane, new Point(0, 0));
-
-		// @pane tilePane: HTMLElement = 200
-		// Pane for `GridLayer`s and `TileLayer`s
-		this.createPane('tilePane');
-		// @pane overlayPane: HTMLElement = 400
-		// Pane for vector overlays (`Path`s), like `Polyline`s and `Polygon`s
-		this.createPane('shadowPane');
-		// @pane shadowPane: HTMLElement = 500
-		// Pane for overlay shadows (e.g. `Marker` shadows)
-		this.createPane('overlayPane');
-		// @pane markerPane: HTMLElement = 600
-		// Pane for `Icon`s of `Marker`s
-		this.createPane('markerPane');
-		// @pane tooltipPane: HTMLElement = 650
-		// Pane for tooltip.
-		this.createPane('tooltipPane');
-		// @pane popupPane: HTMLElement = 700
-		// Pane for `Popup`s.
-		this.createPane('popupPane');
-
-		if (!this.options.markerZoomAnimation) {
-			DomUtil.addClass(panes.markerPane, 'leaflet-zoom-hide');
-			DomUtil.addClass(panes.shadowPane, 'leaflet-zoom-hide');
-		}
-	},
+	// _initPanes: function () {
+	// 	var panes = this._panes = {};
+	// 	this._paneRenderers = {};
+	//
+	// 	// @section
+	// 	//
+	// 	// Panes are DOM elements used to control the ordering of layers on the map. You
+	// 	// can access panes with [`map.getPane`](#map-getpane) or
+	// 	// [`map.getPanes`](#map-getpanes) methods. New panes can be created with the
+	// 	// [`map.createPane`](#map-createpane) method.
+	// 	//
+	// 	// Every map has the following default panes that differ only in zIndex.
+	// 	//
+	// 	// @pane mapPane: HTMLElement = 'auto'
+	// 	// Pane that contains all other map panes
+	//
+	// 	this._mapPane = this.createPane('mapPane', this._container);
+	// 	DomUtil.setPosition(this._mapPane, new Point(0, 0));
+	//
+	// 	// @pane tilePane: HTMLElement = 200
+	// 	// Pane for `GridLayer`s and `TileLayer`s
+	// 	this.createPane('tilePane');
+	// 	// @pane overlayPane: HTMLElement = 400
+	// 	// Pane for vector overlays (`Path`s), like `Polyline`s and `Polygon`s
+	// 	this.createPane('shadowPane');
+	// 	// @pane shadowPane: HTMLElement = 500
+	// 	// Pane for overlay shadows (e.g. `Marker` shadows)
+	// 	this.createPane('overlayPane');
+	// 	// @pane markerPane: HTMLElement = 600
+	// 	// Pane for `Icon`s of `Marker`s
+	// 	this.createPane('markerPane');
+	// 	// @pane tooltipPane: HTMLElement = 650
+	// 	// Pane for tooltip.
+	// 	this.createPane('tooltipPane');
+	// 	// @pane popupPane: HTMLElement = 700
+	// 	// Pane for `Popup`s.
+	// 	this.createPane('popupPane');
+	//
+	// 	if (!this.options.markerZoomAnimation) {
+	// 		DomUtil.addClass(panes.markerPane, 'leaflet-zoom-hide');
+	// 		DomUtil.addClass(panes.shadowPane, 'leaflet-zoom-hide');
+	// 	}
+	// },
 
 
 	// private methods that modify map state
